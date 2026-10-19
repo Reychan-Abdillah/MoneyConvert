@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from src.api_client import FrankfurterAPI
 from src.currency_list import get_currencies
+from src.searchable_dropdown import SearchableDropdown  
 
 api = FrankfurterAPI()
 currency = get_currencies()
@@ -11,8 +12,6 @@ currency_options = [
 ]
 
 print(currency_options)
-
-# Tema dan warna
 ctk.set_appearance_mode("light")
 
 BG = "#F4F5F5"
@@ -23,10 +22,8 @@ MUTED = "#696B70"
 
 app = ctk.CTk(fg_color=BG)
 app.title("MoneyConvert")
+app.iconbitmap("assets/logoTeam.ico")
 app.geometry("420x760") 
-app.resizable(False, False)
-
-# Header
 header = ctk.CTkFrame(app, fg_color="transparent")
 header.pack(fill="x", padx=26, pady=(30, 24))
 
@@ -43,8 +40,6 @@ ctk.CTkLabel(
     font=("Inter", 13),
     text_color=MUTED
 ).pack(anchor="w", pady=(5, 0))
-
-# Kartu konversi
 card = ctk.CTkFrame(
     app,
     fg_color=CARD,
@@ -62,14 +57,12 @@ card.pack(fill="x", padx=20, pady=5)
 def format_amount(event=None):
     value = amount_entry.get()
 
-    # Sisakan hanya angka
     digits = "".join(char for char in value if char.isdigit())
 
     if not digits:
         amount_entry.delete(0, "end")
         return
 
-    # Tambahkan titik setiap tiga digit
     formatted = f"{int(digits):,}".replace(",", ".")
 
     amount_entry.delete(0, "end")
@@ -78,20 +71,21 @@ def format_amount(event=None):
 
 
 
-
-
-
-# BAGIAN DI COMMIT YANG BELUM SELESAI
 def get_amount():
     try:
         amount = float(amount_entry.get().replace(".", ""))
 
         if amount <= 0:
-            raise ValueError("Nominal harus lebih dari 0")
+            raise ValueError("Amount must be greater than 0")
 
         base = base_currency.get().split(" - ")[0]
         quote = quote_currency.get().split(" - ")[0]
 
+        result_label.configure(text="Processing...")
+        rate_label.configure(text="Fetching exchange rate...")
+
+        result_label.update_idletasks()
+        rate_label.update_idletasks()
         rate = api.get_rate(base, quote)
         result = amount * rate
 
@@ -104,19 +98,12 @@ def get_amount():
         )
 
     except ValueError:
-        result_label.configure(text="Input tidak valid")
-        rate_label.configure(text="Masukkan nominal lebih dari 0")
+        result_label.configure(text="Invalid input")
+        rate_label.configure(text="Enter an amount greater than 0")
 
     except Exception as error:
-        result_label.configure(text="Gagal mengambil kurs")
+        result_label.configure(text="Failed to fetch exchange rate")
         rate_label.configure(text=str(error))
-        
-        
-#############################################################        
-        
-        
-        
-# Input nominal
 ctk.CTkLabel(
     card,
     text="YOU SEND",
@@ -136,30 +123,29 @@ amount_entry = ctk.CTkEntry(
 )
 amount_entry.pack(fill="x", padx=20)
 amount_entry.bind("<KeyRelease>", format_amount)
-
-# Mata uang asal
-base_currency = ctk.CTkOptionMenu(
+base_currency = SearchableDropdown(
     card,
-    values= currency_options,
+    values=currency_options,
     height=42,
-    font=("Inter", 14, "bold"),
+    visible_items=5,
+    font=("Inter", 14),
     fg_color="#E9F2F1",
     button_color="#E9F2F1",
     button_hover_color="#D8E8E6",
     text_color=TEAL,
-    dropdown_text_color=DARK
+    dropdown_text_color=DARK,
 )
+
 base_currency.set(currency_options[1])
 base_currency.pack(fill="x", padx=20, pady=(12, 18))
 
-# Garis pemisah
 ctk.CTkFrame(
     card,
     height=1,
     fg_color="#E8EAEA"
 ).pack(fill="x", padx=20)
 
-# Mata uang tujuan
+
 ctk.CTkLabel(
     card,
     text="YOU RECEIVE",
@@ -167,21 +153,23 @@ ctk.CTkLabel(
     text_color=MUTED
 ).pack(anchor="w", padx=22, pady=(18, 8))
 
-quote_currency = ctk.CTkOptionMenu(
+quote_currency = SearchableDropdown(
     card,
-    values= currency_options,
+    values=currency_options,
     height=42,
-    font=("Inter", 14, "bold"),
+    visible_items=5,
+    font=("Inter", 14),
     fg_color="#E9F2F1",
     button_color="#E9F2F1",
     button_hover_color="#D8E8E6",
     text_color=TEAL,
     dropdown_text_color=DARK
 )
-quote_currency.set(currency_options[2])
-quote_currency.pack(fill="x", padx=20)
 
-# Hasil sementara
+quote_currency.set(currency_options[1])
+quote_currency.pack(fill="x", padx=20, pady=(12, 18))
+
+
 result_label = ctk.CTkLabel(
     card,
     text="0.00",
@@ -197,13 +185,6 @@ rate_label = ctk.CTkLabel(
     text_color=MUTED
 )
 rate_label.pack(anchor="w", padx=22, pady=(5, 22))
-
-
-
-
-
-#BAGIAN COMMIT YANG BELUM SELESAI
-# Tombol konversi
 convert_button = ctk.CTkButton(
     app,
     text="Convert currency  →",
@@ -216,8 +197,6 @@ convert_button = ctk.CTkButton(
     command=get_amount
 )
 convert_button.pack(fill="x", padx=20, pady=22)
-
-# Catatan bawah
 ctk.CTkLabel(
     app,
     text="Rates powered by Frankfurter API",
