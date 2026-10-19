@@ -1,9 +1,11 @@
 import customtkinter as ctk
 from src.api_client import FrankfurterAPI
+from src.converter import CurrencyConverter
 from src.currency_list import get_currencies
 from src.searchable_dropdown import SearchableDropdown  
 
 api = FrankfurterAPI()
+converter = CurrencyConverter(api)
 currency = get_currencies()
 
 currency_options = [
@@ -23,7 +25,9 @@ MUTED = "#696B70"
 app = ctk.CTk(fg_color=BG)
 app.title("MoneyConvert")
 app.iconbitmap("assets/logoTeam.ico")
+app.resizable(False, False)
 app.geometry("420x760") 
+
 header = ctk.CTkFrame(app, fg_color="transparent")
 header.pack(fill="x", padx=26, pady=(30, 24))
 
@@ -71,6 +75,7 @@ def format_amount(event=None):
 
 
 
+
 def get_amount():
     try:
         amount = float(amount_entry.get().replace(".", ""))
@@ -86,8 +91,8 @@ def get_amount():
 
         result_label.update_idletasks()
         rate_label.update_idletasks()
-        rate = api.get_rate(base, quote)
-        result = amount * rate
+
+        result, rate = converter.convert(amount, base, quote)
 
         result_label.configure(
             text=f"{result:,.2f}"
@@ -104,6 +109,7 @@ def get_amount():
     except Exception as error:
         result_label.configure(text="Failed to fetch exchange rate")
         rate_label.configure(text=str(error))
+
 ctk.CTkLabel(
     card,
     text="YOU SEND",
