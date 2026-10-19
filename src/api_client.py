@@ -7,7 +7,6 @@ class FrankfurterAPI :
     def get_rate(self, base, quote):
          url = f"{self.base_url}/rate/{base}/{quote}"
 
-
          response = requests.get(url, timeout=10)
          response.raise_for_status()    
 
