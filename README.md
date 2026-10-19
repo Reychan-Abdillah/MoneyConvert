@@ -1,102 +1,65 @@
-
 # MoneyConvert
 
-Aplikasi desktop untuk konversi mata uang yang dibangun menggunakan Python dan CustomTkinter, dengan Frankfurter API sebagai sumber data nilai tukar.
+MoneyConvert adalah aplikasi desktop untuk mengonversi mata uang menggunakan nilai tukar dari [Frankfurter API](https://frankfurter.dev/). Aplikasi ini dibuat menggunakan Python dan CustomTkinter dengan antarmuka sederhana yang memudahkan pengguna memilih mata uang, memasukkan nominal, dan melihat hasil konversi.
 
-MoneyConvert dirancang untuk menyediakan pengalaman konversi mata uang yang sederhana melalui antarmuka grafis yang bersih dan mudah digunakan.
+Proyek ini dikembangkan sebagai sarana belajar Python sekaligus bagian dari portofolio pengembangan aplikasi.
 
-## Overview
+## Fitur
 
-MoneyConvert merupakan proyek pengembangan aplikasi desktop yang berfokus pada penerapan Python, pemrograman berorientasi objek (OOP), integrasi REST API, dan pemisahan tanggung jawab antarkomponen.
+- Konversi mata uang berdasarkan nilai tukar dari Frankfurter API.
+- Pemilihan mata uang asal dan tujuan.
+- Dropdown dengan fitur pencarian berdasarkan kode dan nama mata uang.
+- Daftar mata uang yang diambil dari API, dengan batas maksimal 160 data.
+- Validasi nominal agar nilai yang dikonversi lebih besar dari nol.
+- Tampilan hasil konversi beserta nilai tukar.
+- Penanganan kesalahan saat permintaan API gagal.
 
-Aplikasi mengambil nilai tukar dari Frankfurter API, kemudian menggunakannya untuk menghitung hasil konversi berdasarkan nominal dan mata uang yang dipilih pengguna.
+## Teknologi
 
-## Features
+- **Python** — bahasa pemrograman utama.
+- **CustomTkinter** — membangun antarmuka desktop.
+- **Requests** — mengirim permintaan HTTP ke API.
+- **Frankfurter API** — menyediakan data nilai tukar dan daftar mata uang.
+- **Git** — pengelolaan versi kode.
 
-- Memilih mata uang asal dan mata uang tujuan.
-- Memasukkan nominal uang yang ingin dikonversi.
-- Mengambil nilai tukar melalui Frankfurter API.
-- Menghitung dan menampilkan hasil konversi.
-- Menampilkan informasi nilai tukar yang digunakan.
-- Memvalidasi input nominal.
-- Menangani kesalahan HTTP dan kegagalan permintaan API.
-
-## Tech Stack
-
-| Teknologi | Kegunaan |
-|---|---|
-| Python | Bahasa pemrograman utama |
-| CustomTkinter | Membangun antarmuka grafis aplikasi desktop |
-| Requests | Mengirim permintaan HTTP ke API |
-| Frankfurter API | Menyediakan data nilai tukar mata uang |
-| Git | Mengelola versi kode sumber |
-
-## Project Structure
+## Struktur Proyek
 
 ```text
 convertet-money/
+├── assets/
+│   └── logoTeam.ico
 ├── docs/
 │   ├── architecture.md
 │   └── test-plan.md
 ├── src/
-│   ├── __init__.py
 │   ├── api_client.py
-│   └── converter.py
-├── tests/
+│   ├── converter.py
+│   ├── currency_list.py
+│   └── searchable_dropdown.py
 ├── .gitignore
 ├── main.py
-├── requirements.txt
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
-### Struktur Komponen
+## Instalasi dan Menjalankan Aplikasi
 
-- `main.py` — titik masuk aplikasi, pengelolaan antarmuka grafis, dan interaksi pengguna.
-- `src/api_client.py` — menangani komunikasi dengan Frankfurter API.
-- `src/converter.py` — menyediakan logika perhitungan konversi mata uang.
-- `tests/` — direktori untuk pengujian aplikasi.
-- `docs/` — menyimpan dokumentasi kebutuhan, arsitektur, dan rencana pengujian.
-- `requirements.txt` — mencatat dependency Python yang diperlukan.
-- `.gitignore` — menentukan file yang tidak disertakan dalam version control.
-
-## Architecture
-
-MoneyConvert menggunakan pendekatan modular untuk memisahkan tanggung jawab antarkomponen.
-
-- **Presentation Layer:** `main.py` mengelola antarmuka grafis dan alur interaksi pengguna menggunakan CustomTkinter.
-- **API Client:** `src/api_client.py` menangani permintaan HTTP dan pengambilan data nilai tukar.
-- **Conversion Engine:** `src/converter.py` menyediakan logika bisnis untuk menghitung hasil konversi.
-
-Pemisahan ini dirancang untuk meningkatkan keterbacaan kode, kemudahan pengujian, dan pemeliharaan aplikasi.
-
-> Catatan: Pada implementasi saat ini, perhitungan konversi masih dilakukan di `main.py`. Integrasi `CurrencyConverter` ke alur utama aplikasi merupakan bagian pengembangan berikutnya.
-
-## Installation
-
-### 1. Clone Repository
-
-Ganti `<repository-url>` dengan URL repository GitHub yang sebenarnya.
+Pastikan Python sudah terpasang di komputer. Klon repositori, lalu masuk ke direktori proyek.
 
 ```bash
-git clone <repository-url>
-cd convertet-money
+git clone https://github.com/Reychan-Abdillah/MoneyConvert.git
+cd MoneyConvert
 ```
 
-### 2. Buat Virtual Environment
+Buat virtual environment:
 
 ```bash
 python -m venv .venv
 ```
 
-### 3. Aktifkan Virtual Environment
+Aktifkan virtual environment.
 
-**Windows — Command Prompt:**
-
-```bat
-.venv\Scripts\activate.bat
-```
-
-**Windows — PowerShell:**
+**Windows PowerShell:**
 
 ```powershell
 .venv\Scripts\Activate.ps1
@@ -108,72 +71,70 @@ python -m venv .venv
 source .venv/Scripts/activate
 ```
 
-### 4. Instal Dependencies
+Pasang dependensi:
 
 ```bash
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
-Perintah tersebut akan memasang seluruh library yang tercantum dalam `requirements.txt`.
-
-### 5. Jalankan Aplikasi
+Jalankan aplikasi:
 
 ```bash
 python main.py
 ```
 
-Pastikan Python sudah terpasang dan komputer memiliki koneksi internet untuk mengambil data nilai tukar dari API.
+Pastikan komputer terhubung ke internet agar aplikasi dapat mengambil data nilai tukar dari API.
 
-## API Reference
+## Sumber Data API
 
-MoneyConvert menggunakan [Frankfurter API](https://frankfurter.dev/) sebagai sumber data nilai tukar.
+MoneyConvert menggunakan Frankfurter API untuk mengambil nilai tukar dan daftar mata uang.
 
-### Endpoint Nilai Tukar
+| Endpoint | Kegunaan |
+|---|---|
+| `GET /v2/rate/{base}/{quote}` | Mengambil nilai tukar antara dua mata uang. |
+| `GET /v2/currencies` | Mengambil daftar mata uang yang tersedia. |
 
-```http
-GET https://api.frankfurter.dev/v2/rate/{base}/{quote}
+Base URL:
+
+```text
+https://api.frankfurter.dev/v2
 ```
 
-Parameter:
+Permintaan API menggunakan timeout 10 detik. Jika permintaan gagal, aplikasi akan menangani kesalahan dan menampilkan informasi pada antarmuka.
 
-| Parameter | Deskripsi | Contoh |
-|---|---|---|
-| `base` | Kode mata uang asal | `USD` |
-| `quote` | Kode mata uang tujuan | `IDR` |
+Informasi lebih lanjut tersedia di [dokumentasi Frankfurter API](https://frankfurter.dev/).
 
-Contoh endpoint:
+## Struktur Kode
 
-```http
-GET https://api.frankfurter.dev/v2/rate/USD/IDR
-```
+- **`main.py`** — mengatur antarmuka, mengambil input pengguna, menjalankan konversi, dan menampilkan hasil.
+- **`src/api_client.py`** — menangani permintaan ke Frankfurter API, termasuk pengambilan nilai tukar dan daftar mata uang.
+- **`src/converter.py`** — menghitung hasil konversi berdasarkan nominal dan nilai tukar yang diperoleh dari API.
+- **`src/currency_list.py`** — mengolah daftar mata uang dari API menjadi data kode dan nama yang digunakan aplikasi. Saat ini, maksimal 160 data pertama yang diproses.
+- **`src/searchable_dropdown.py`** — menyediakan dropdown dengan fitur pencarian mata uang.
+- **`assets/logoTeam.ico`** — ikon aplikasi.
+- **`docs/architecture.md`** — dokumentasi arsitektur aplikasi.
+- **`docs/test-plan.md`** — rencana pengujian manual.
 
-Aplikasi membaca nilai kurs dari properti `rate` pada respons API dan menggunakannya untuk menghitung hasil konversi.
+## Pengujian
 
-### Endpoint Daftar Mata Uang
+Pengujian dilakukan secara manual dengan menjalankan aplikasi dan memeriksa fungsi-fungsi utamanya, meliputi:
 
-```http
-GET https://api.frankfurter.dev/v2/currencies
-```
+- Pengambilan nilai tukar dari API.
+- Konversi nominal dan tampilan hasil.
+- Pemilihan serta pencarian mata uang.
+- Validasi input kosong, nol, atau negatif.
+- Penanganan gangguan koneksi dan kegagalan permintaan API.
 
-Endpoint ini digunakan oleh metode `get_currencies()` untuk mengambil data mata uang. Integrasinya dengan pilihan mata uang pada antarmuka masih dapat dikembangkan lebih lanjut.
+Rincian skenario pengujian tersedia di [`docs/test-plan.md`](docs/test-plan.md). Proyek ini belum menggunakan pengujian otomatis.
 
-Informasi endpoint dan format respons dapat dilihat pada dokumentasi resmi Frankfurter API.
+## Status Proyek
 
-## Documentation
+MoneyConvert sudah dapat menjalankan fungsi konversi mata uang. Pengembangan dan penyempurnaan antarmuka masih dapat dilanjutkan sesuai kebutuhan.
 
-Dokumentasi teknis tersedia di direktori `docs/`:
+## Lisensi
 
-- [Arsitektur Sistem](docs/architecture.md)
-- [Rencana Pengujian](docs/test-plan.md)
+MIT License
 
-## Project Status
+---
 
-**Status: In Development**
-
-MoneyConvert dikembangkan secara bertahap sebagai proyek pembelajaran dan portofolio untuk memperdalam pemahaman tentang Python, OOP, integrasi API, antarmuka grafis, dan praktik pengembangan perangkat lunak.
-
-## License
-
-Lisensi proyek belum ditentukan.
-
-Penggunaan, modifikasi, dan distribusi ulang kode oleh pihak lain perlu mengikuti lisensi yang nantinya dipilih oleh pemilik proyek.
+Dibuat sebagai proyek pembelajaran Python dan portofolio pengembangan aplikasi desktop.
